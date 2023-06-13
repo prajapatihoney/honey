@@ -1,7 +1,9 @@
 <?php 
-require 'functions.php';
 
-dd($_SERVER);
+
+$heading = "Home";
+
+require "views/index.view.php";
 
 
 ?>
