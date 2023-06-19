@@ -1,28 +1,26 @@
 <?php 
 
-$config = require base_path('config.php');
+use Core\App;
+use Core\Database;
 
-$db = new Database($config['database']);
+$db = App::resolve(Database::class);
 
+//dd($_SERVER);
 $currentUserId = 1;
 
-//$id = $_GET['id'];
-//dd($id);
-$note = $db->query('select * from notes where id = :id', [
+    $note = $db->query('select * from notes where id = :id', [
 
-    'id' => $_GET['id']
-    ])->findOrFail();
+            'id' => $_GET['id']
+            ])->findOrFail();
+        //dd($note);
+        
+        authorize($note['user_id'] == $currentUserId);
+            
+        view("notes/show.view.php", [
+            'heading' => 'Note',
+            'note' => $note
 
-//dd($note);
+        ]);
 
-authorize($note['user_id'] == $currentUserId);
-
-
-
-view("notes/show.view.php", [
-    'heading' => 'Note',
-    'notes' => $note
-
-]);
 
 ?>

@@ -1,29 +1,32 @@
 <?php 
 
+session_start();
+
 const BASE_PATH = __DIR__ . '/../';
 
-require BASE_PATH . 'functions.php'; 
-
-//require base_path('response.php');
-
-//require base_path('database.php');
+require BASE_PATH . 'Core/functions.php'; 
 
 spl_autoload_register(function ($class) {
-    require base_path("core/" .$class . '.php');
+    
+    $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+    
+    require base_path("{$class}.php");
 });
 
-require base_path('router.php');
+require base_path('bootstrap.php');
 
 
+$router = new \Core\Router();
 
+$routes = require base_path('routes.php');
 
-//$id = $_GET['id'];
+$uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+//dd($uri);
+$method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+//dd($method);
 
-//$query = "select * from posts where id = :id";
+$router->route($uri, $method);
 
-//$posts = $db->query($query, [':id' => $id])->fetch();
-
-//dd($posts);
 
 ?>
 
